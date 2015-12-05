@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="play_field_color" type="color">#FF87CEFA</item>
+    <item name="play_grid_color" type="color">#FF444444</item>
+    <item name="dark_checkers_color" type="color">#FF444444</item>
+    <item name="white_checkers_color" type="color">#FFF0F8FF</item>    
+    <item name="allowed_moves_color" type="color">#FF2569DF</item>
+    <item name="chosen_checker" type="color">#FFFF0000</item>
+    
+    
+</resources>

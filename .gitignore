@@ -105,3 +105,6 @@ proguard/
 ### Android Patch ###
 gen-external-apklibs
 
+### Custom ###
+demo.mp4
+statistics.txt

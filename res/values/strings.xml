@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Senegal Checkers</string>
+    <string name="game_title">Сенегальские шашки</string>
+    <string name="game_continue">Продолжить</string>
+    <string name="one_player">Один игрок</string>
+    <string name="two_players">Два игрока</string>
+    <string name="rules">Правила</string>
+    <string name="white_color">Белые</string>
+    <string name="black_color">Чёрные</string>
+    <string name="rules_text_part1">Шашки размещаются так как показано на доске.</string>
+    <string name="rules_text">Игроки ходят по очереди, передвигая свою шашку на одну клетку вперед, вправо или влево (движение по диагоналям или назад запрещается).\n\n. Перепрыгивать через шашку противника  обязательно. Бой назад возможен.\n\nЕсли у игрока есть выбор, какие шашки рубить, он выбирает тот вариант, в котором берется максимум шашек. Выбор остается за игроком если все варианты дают одинаковое количество срубленных шашек.\n\nСрубленная шашка снимается с доски. Шашка, дошедшая до последней горизонтали, теряет возможность двигаться, в том числе и возможность рубить назад. При этом шашка, находящаяся на последней горизонтали, приносит игроку одно дополнительное очко.\n\nЦель игры набрать максимум шашек противника. Игра заканчивается когда один из игроков теряет возможность брать шашки противника. Это наступает в трех случаях: 1. Когда игрок теряет все шашки. 2. Когда шашки игрока продвинаются ЗА шашки противника. 3. Когда все оставшиеся у игрока шашки находятся на последней горизотали(они обездвижены).</string>
+    <string name="game_field_description">Старотвое игровое поле</string>
+    <string name="turn">Ход:</string>
+    <string name="player1">Игрок 1</string>
+    <string name="player2">Игрок 2</string>
+    <string name="man">(Человек)</string>
+    <string name="machine">(Машина)</string>
+    <string name="Error">Ошибка!</string>
+    <string name="two_machines">Две машины</string>
+    <string name="EndGame">Конец игры!</string>
+    <string name="BackToMainMenu">Вернуться</string>
+    <string name="Draw">Ничья!</string>
+    <string name="Player1won">Победил игрок 1!</string>
+    <string name="Player2won">Победил игрок 2!</string>
+    <string name="SecretMode">Открыт режим "Две машины"!</string>
+    
+    <string name="games_amount">Укажите количество игр</string>
+    <string name="games_amount_hint">введите число от 1 до 100</string>
+    <string name="chose_white_AI">Выберите ИИ белых</string>
+    <string name="chose_black_AI">Выберите ИИ черных</string>
+    <string name="start_button">Старт</string>
+    <string-array name="AIs">
+        <item>v1 (шашки+бонус+конец хода)</item>
+        <item>v2 (ш+б+кх(новые))</item>
+        <item>v3 (шашки+бонус+длительность)</item>
+    </string-array>
+    
+    <string name="games_in_total">Всего игр</string>
+    <string name="white_winnings">Побед белых</string>
+    <string name="black_winnings">Побед черных</string>
+    <string name="draws">Ничьи</string>
+    <string name="average_moves_per_game">Среднее число ходов в партии</string>
+
+</resources>
