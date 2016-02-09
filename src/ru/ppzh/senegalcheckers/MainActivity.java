@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
             WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_main);
 		
-		//---Для появления кнопки ДВЕ МАШИНЫ нужно сделать 10 тапов по лейблу за 10 секунд
+		// To reveal mTwoMachinesButton you need to make 10 taps in 10 seconds over the label.
 		t = count = 0;
 		titleView = (TextView)findViewById(R.id.title_view);
 		titleView.setOnClickListener(new View.OnClickListener() {
@@ -53,11 +53,6 @@ public class MainActivity extends Activity {
 			}
 		});
 		
-		
-		//---Обработчик кнопки ПРОДОЛЖИТЬ
-		// скоро добавлю
-		
-		//---Обработчик кнопки ОДИН ИГРОК---
 		mOnePlayerButton = (Button) findViewById(R.id.one_player_button);
 		mOnePlayerButton.setOnClickListener(new View.OnClickListener() {
 			
@@ -68,7 +63,6 @@ public class MainActivity extends Activity {
 			}
 		});
 		
-		//---Обработчик кнопки ДВА ИГРОКА---
 		mTwoPlayersButton = (Button) findViewById(R.id.two_players_button);
 		mTwoPlayersButton.setOnClickListener(new View.OnClickListener() {
 			
@@ -80,7 +74,6 @@ public class MainActivity extends Activity {
 			}
 		});	
 		
-		//---Обработчик кнопки ПРАВИЛА---
 		mRulesButton = (Button) findViewById(R.id.rules_button);
 		mRulesButton.setOnClickListener(new View.OnClickListener() {
 			
@@ -91,7 +84,6 @@ public class MainActivity extends Activity {
 			}
 		});
 		
-		//---Обработчик кнопки ДВЕ МАШИНЫ---
 		mTwoMachinesButton = (Button) findViewById(R.id.two_machines_button);
 		mTwoMachinesButton.setOnClickListener(new View.OnClickListener() {
 			
@@ -102,7 +94,6 @@ public class MainActivity extends Activity {
 			}
 		});	
 		
-		//---Вывод версии программы---
 		String mVersion;		 
 		try {
 			mVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;	

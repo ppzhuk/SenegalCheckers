@@ -16,16 +16,15 @@ public abstract class PlayerMachine extends Player {
 		this.analizeDepth = analizeDepth;
 	}
 	
-	// Определяем все возможные ходы
+	// Define all possible moves.
 	@Override
 	public void defineMoves(){
 		getGameState().defineMoves();   
 		if (getGameState().getMovesAmount() > 0) {
 			eraseEstimators(getGameState());
-			getGameState().setPrev(null);  			// У корневого узла всегда отсутствует предок.
-			 
-			// Дерево строится с нуля каждый раз. Это оказалось проще чем достраивать его до нужной глубины после каждого хода.
-			// Хотя и немного затратнее по времени.
+			getGameState().setPrev(null);  	// The root has no parent.
+			
+            // Every move the tree is built from scratch. Its easier than adding new leafs, inspite of taking more time.
 			getGameState().getNext().clear();		
 			makeTree(getGameState(), 0);	
 		}
@@ -36,9 +35,9 @@ public abstract class PlayerMachine extends Player {
 		show(getGameState(), 0);
 	}	
 	private void show(GameState gs, int depth) {
-		Log.i(TREE_INFO, "ход: "+gs.getCurr_move()+". Глубина: "+depth);
+		Log.i(TREE_INFO, "move: "+gs.getCurr_move()+". depth: "+depth);
 		Log.i(TREE_INFO, "Estimate: "+gs.getEstimate());	
-		Log.i(TREE_INFO, "Цепочка ходов:");
+		Log.i(TREE_INFO, "moves chain:");
 		for (int i = 0; i < gs.getMovesline().size(); i++) {
 			Log.i(TREE_INFO, ""+gs.getMovesline().get(i).getI()+" "+gs.getMovesline().get(i).getJ()+" --> "+
 								gs.getMovesline().get(i).getPoint().get(gs.getMoveindex().get(i)).getX()+" "+
@@ -52,14 +51,14 @@ public abstract class PlayerMachine extends Player {
 	//------------------
 
 
-	// Строит дерево ходов на заданную глубину
+	// Build a moves tree with a particular depth.
 	public void makeTree(GameState gState, int depth){
 		if (gState.getMovesAmount() == -1) gState.defineMoves(); 
-		// игра может закончиться раньше, чем будет достигнута заданная глубина.
+		// Game can be finished before the required depth is reached.
 		if (depth < analizeDepth) {  		
 			if ((gState.getMovesAmount() > 0) && (!gState.checkersExchanged())) {	
 				terminate_analize = false;
-				Moves moves[] = getMovesArray(gState); 				// достраиваем дочерние узлы
+				Moves moves[] = getMovesArray(gState); 				// Build child nodes.
 				for (int k = 0; k < gState.getMovesAmount(); k++) {
 					if (!terminate_analize) {
 						downToMovesTree(moves[k], gState, gState, depth, null, null);
@@ -73,9 +72,8 @@ public abstract class PlayerMachine extends Player {
 		defineEstimate(gState, depth);
 	}
 	
-	// Как только добрались до листа дерева - получаем его оценку и применяем альфа-бета отсечения для определения,
-	// нужно ли дальше строить дерево для данной ветки ходов. Для этого сравниваем оценку узла с оценкой двух родительских узлов.
-	// Оценка узлам выставляется по принципу минимакса.
+    // When a leaf has been reached get its estimate and apply alpha-beta pruning.	
+    // Estimate for non-leaf nodes is defined with minimax.
 	private void defineEstimate(GameState gState, int depth) {
 		if (gState.getMovesAmount() == 0 || gState.checkersExchanged() || depth == analizeDepth) {
 			getEstimator(gState, this.getColor());
@@ -103,31 +101,31 @@ public abstract class PlayerMachine extends Player {
 		}
 	}
 	
-	// Каждый ход, в свою очередь может также представлять разветвленное дерево и давать несколько вариантов.
+	// Each move can generate new moves subtree.
 	private void downToMovesTree(Moves move, GameState gState, GameState globalState, int depth, 
 								 ArrayList<Moves> moves, ArrayList<Integer> index){
-		// каждая шашка может иметь до 4 направлений хода. Что, потенциально, может дать 4ре узла.
+		// Should check all diretions this checker can move.
 		for (int i = 0; i < move.getN(); i++) {
-			GameState gs = new GameState();				// для каждого из возможных направлений создаем новый узел GameState
-			gs.copy(gState);							// и имитируем совершение хода
+			GameState gs = new GameState();				// For each direction make new node.
+			gs.copy(gState);							
 			gs.setCurr_move(gState.getCurr_move());
 			gs.changeField(move.getI(), move.getJ(), move.getPoint().get(i));
 			
 			
 			ArrayList<Moves> movesline = new ArrayList<Moves>();		//-----------------
 			ArrayList<Integer> movesindex = new ArrayList<Integer>();	// 
-			if (moves != null) {										// Запоминаем информацию о текущем ходе (move)
-				copyMovesInfo(movesline, moves, movesindex, index);		// и о направлении, в котором был сделан ход (i)
-			}															// Это используется только для логгирования информации 
-			movesline.add(move);										// о построеном дереве
+			if (moves != null) {										// Remember some information for 
+				copyMovesInfo(movesline, moves, movesindex, index);		// logging info about moves tree.
+			}															// 
+			movesline.add(move);										// 
 			movesindex.add(i);											//-----------------
-																								
-			
-																									// пока можно продолжить
-			downToMovesTree(move.getNext().get(i), gs, globalState, depth, movesline, movesindex);  // ход - рекурсия
+            
+            // Go recursion until next move are possible.
+			downToMovesTree(move.getNext().get(i), gs, globalState, depth, movesline, movesindex);  
 		}
-		if (move.getN() == 0) {										// если ход продложить нельзя, проводим необходимые действия над 	
-			if (globalState.getCurr_move() == GameLogic.WHITE) {	// GameState и добавляем его в в дерево
+        // Add node to moves tree.
+		if (move.getN() == 0) {										
+			if (globalState.getCurr_move() == GameLogic.WHITE) {	
 				gState.setCurr_move(GameLogic.BLACK);
 			} else {
 				gState.setCurr_move(GameLogic.WHITE);
@@ -140,7 +138,7 @@ public abstract class PlayerMachine extends Player {
 		}
 	}
 	
-	//копирование данных
+	// Copy information about moves.
 	private void copyMovesInfo(ArrayList<Moves> movesTO, ArrayList<Moves> movesFROM,
 							   ArrayList<Integer> indexTO, ArrayList<Integer> indexFROM){
 		
@@ -150,7 +148,7 @@ public abstract class PlayerMachine extends Player {
 		}
 	}
 	
-	// Для простоты индексации превращает двумерный массив ходов в одномерный 
+	// Convert 2d array into 1d (1d array is easier to use).
 	private Moves[] getMovesArray(GameState gState) {
 		Moves moves[] = new Moves[gState.getMovesAmount()];
 		int k = 0;
@@ -169,10 +167,10 @@ public abstract class PlayerMachine extends Player {
 		gs.setEstimate(-1);
 	}
 	
-	// выбор одного из дочерних улов для совершения хода
+	// Pick child node to make move.
 	@Override
 	public void makeMove(){
-		// выбор рандомного узла при одинаковой оценке
+		// Make random choice if estimates are equal.
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		for (int i = 0; i < getGameState().getNext().size(); i++) {
 			if (getGameState().getNext().get(i).getEstimate() == getGameState().getEstimate()) {
@@ -185,7 +183,7 @@ public abstract class PlayerMachine extends Player {
 		changeState(list.get(random));
 		
 		/*
-		// выбор первого узла с данной оценкой
+		// Chose the first node if estimates are equal.
 		int i = 0;
 		while ((getGameState().getNext().get(i).getEstimate() != getGameState().getEstimate()) &&
 			   ( i < getGameState().getNext().size())) {
@@ -195,11 +193,12 @@ public abstract class PlayerMachine extends Player {
 		*/
 	}
 	
-	// Изменения в поле текущего игрока после хода портивника
+	// Apply changes after move.
 	@Override
 	public void changeStateEnemyMove(GameState gs){
-		// Если ход, сделанный противником был проанализирован - тогда находим его в дереве анализа и спускаемся к ниму.
-		// Иначе в ручную копируем данные gs в текущий gameState и меняем цвет игрока совершающего следующий ход.
+        // If enemy's move had been in moves tree then find it and go down the tree
+        // (it can be not in moves tree cause of ab-pruning). 
+        // Otherwise - copy gs to current gamestate and change player's color.
 		int size = getGameState().getNext().size();
 		if (size != 0) {
 			int i = 0;
@@ -219,7 +218,7 @@ public abstract class PlayerMachine extends Player {
 		}
 	}
 	
-	// сравнение двух полей
+	
 	private boolean fieldsEqual(int[][] a, int[][] b){
 		for (int i = 0; i < GameLogic.HORIZONTAL_CELL_AMOUNT; i++) {
 			for (int j = 0; j < GameLogic.VERTICAL_CELL_AMOUNT; j++) {
@@ -229,9 +228,8 @@ public abstract class PlayerMachine extends Player {
 		return true;
 	}
 	
-	// Оценочная функция для компьютерного игрока. 
-	// При создании игрока-машины необходимо 
-	// наследовать класс от PlayerMachine и переопределить getEstimator.
-	// Все оценки описаны в классе Estimate.
+	// Estimate function for the AI player.
+	// To make AI player you should inherit PlayerMachine and overwrite getEstimator.
+	// All estimations should be placed in Estinamor class.
 	abstract protected void getEstimator(GameState gs, int color);
 }

@@ -7,7 +7,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-// Данная активити показывает стистику проведенных игр в случае режима GameLogic.MODE_TWO_MACHINES
+// This activity shows statistics for the game mode GameLogic.MODE_TWO_MACHINES
 public class MachinesStatisticsActivity extends Activity {
 	public static final String GAMES_AMOUNT_EXTRA = "ru.ppzh.senegalcheckers.games_in_total";
 	public static final String WHITE_AI_EXTRA = "ru.ppzh.senegalcheckers.white_ai_index";

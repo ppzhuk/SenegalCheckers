@@ -3,13 +3,13 @@ package ru.ppzh.senegalcheckers;
 import java.util.ArrayList;
 
 public class Moves {
-	private int depth;	// глубина текущего узла
-	private int n;		// количество ходов из данного узла
-	private int i;		// координаты текущего узла
-	private int j;		// 
-	private ArrayList<Point> point; // координаты возможных ходов
-	private ArrayList<Moves> next;	// ссылки на следующие элементы дерева
-	
+	private int depth;
+	private int n;		// Amount of moves from this node.
+	private int i;
+    private int j;
+	private ArrayList<Point> point;     // Coordinates of the next moves.
+	private ArrayList<Moves> next;
+    
 	public Moves() {
 		n = 0;
 		depth = i = j = -1;

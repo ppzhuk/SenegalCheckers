@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-// Активити настроек режима GameLogic.MODE_TWO_MACHINES
 public class MachinesActivity extends Activity {
 
 	private EditText games_amount_EditText;

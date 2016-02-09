@@ -6,12 +6,12 @@ public class Estimate {
 	private static final String TAG = "Estimate";
 
 	//----AI_v1-----------------------------------------
-	// возвращает количество шашек своего цвета
+	// Return the amount of checkers of appropriate color.
 	public static int ChackersAmountEstimate(GameState gameState, int color){
 		return color == GameLogic.WHITE ? gameState.getWhite_checkers() : gameState.getBlack_checkers();
 	}
 	
-	// оценка на основе бонусных очков
+	// Estimate based on bonus checkers.
 	public static int BonusPointsEstimate(GameState gameState, int color){	
 		return gameState.getOnFinalLine(color)*5;
 	}
@@ -43,7 +43,7 @@ public class Estimate {
 		return estimate;
 	}
 	
-	// оценка на основе бонусных очков
+	// Estimate based on bonus checkers (new variant).
 	public static int BonusCheckersEstimateNew(GameState gameState, int color){	
 		int estimate = 0;
 		boolean inverted = gameState.isInverted();
@@ -81,68 +81,70 @@ public class Estimate {
 				return 1000000;
 			} else {
 				return winner != GameLogic.DRAW ? -1000000 : 0;
-				// такое распределение очков дает нам то, что ИИ будет: 1 всегда избегать проигрыша
-				// 2 всегда стремиться к победе и 3 выбирать ничью только если альтернатива - проигрыш
+				// These values give us AI which: 1 -  always avoid to lose.
+                // 2 - always tries to win and choose draw only if alternative is lose.
 			}
 		}
 		return 0;
 	}
 	
-	// оценка на основе бонусных очков
-		public static int BonusCheckersEstimateNewWithEnemyCheckers(GameState gameState, int color, int tax){	
-			int estimate = 0;
-			boolean inverted = gameState.isInverted();
-			int[][] field = gameState.getField();
-			int ourLastLine;
-			int enemyLastLine;
-			if (!inverted) {
-				ourLastLine = 0; 
-				enemyLastLine = GameLogic.VERTICAL_CELL_AMOUNT-1;
-				if (color == GameLogic.BLACK) {
-					ourLastLine = GameLogic.VERTICAL_CELL_AMOUNT-1;
-					enemyLastLine = 0;
-				} 	
-			} else {
-				ourLastLine = GameLogic.VERTICAL_CELL_AMOUNT-1;
-				enemyLastLine = 0;
-				if (color == GameLogic.BLACK) {
-					ourLastLine = 0;
-					enemyLastLine = GameLogic.VERTICAL_CELL_AMOUNT-1;
-				} 	
-			}
-			int enemyCheckersAmountAtOurLastLine = gameState.getOnFirstLine(color == GameLogic.BLACK ? GameLogic.WHITE : GameLogic.BLACK);
-			boolean isEnemyAtOurLastLine = enemyCheckersAmountAtOurLastLine == 0 ? false : true;
-			int ourCheckersAmountAtOurFirstLine = gameState.getOnFirstLine(color);
-			boolean isOurNotAtOurFirstLine = ourCheckersAmountAtOurFirstLine == 0 ? true : false;
-			
-			int enemyColor = color == GameLogic.BLACK ? GameLogic.WHITE : GameLogic.BLACK;
-			
-			for (int i = 0; i < GameLogic.HORIZONTAL_CELL_AMOUNT; i++) {
-				if (field[i][ourLastLine] == color) {
-					if (!isEnemyAtOurLastLine || i == 0 || i == GameLogic.HORIZONTAL_CELL_AMOUNT-1 ||
-						(i < GameLogic.HORIZONTAL_CELL_AMOUNT-1 && field[i+1][ourLastLine] == color) || 
-						(i > 0 && field[i-1][ourLastLine] == color)) {
-						estimate += 600;
-					} else {
-						estimate -= 900;
-					}
-				}
-				if (field[i][enemyLastLine] == enemyColor) {
-					if (isOurNotAtOurFirstLine || i == 0 || i == GameLogic.HORIZONTAL_CELL_AMOUNT-1 ||
-						(i < GameLogic.HORIZONTAL_CELL_AMOUNT-1 && field[i+1][enemyLastLine] == enemyColor) || 
-						(i > 0 && field[i-1][enemyLastLine] == enemyColor)) {
-						estimate -= 1100;
-					} else {
-						// реакции на незащищенные бонусные шашки:
-						// 0   - чаще всего шашки не пускает, кроме редких случаев. норм для среднего.
-						// -50 - маниакально не пуускает все шашки. норм для тяжелого ИИ.
-						estimate -= tax;
-					}
-				}
-			}
-			
-			return estimate;
-		}
+		// Estimate based on bonus checkers (with enemy checkers).
+    public static int BonusCheckersEstimateNewWithEnemyCheckers(GameState gameState, int color, int tax){	
+        int estimate = 0;
+        boolean inverted = gameState.isInverted();
+        int[][] field = gameState.getField();
+        int ourLastLine;
+        int enemyLastLine;
+        
+        if (!inverted) {
+            ourLastLine = 0; 
+            enemyLastLine = GameLogic.VERTICAL_CELL_AMOUNT-1;
+            if (color == GameLogic.BLACK) {
+                ourLastLine = GameLogic.VERTICAL_CELL_AMOUNT-1;
+                enemyLastLine = 0;
+            } 	
+        } else {
+            ourLastLine = GameLogic.VERTICAL_CELL_AMOUNT-1;
+            enemyLastLine = 0;
+            if (color == GameLogic.BLACK) {
+                ourLastLine = 0;
+                enemyLastLine = GameLogic.VERTICAL_CELL_AMOUNT-1;
+            } 	
+        }
+        
+        int enemyCheckersAmountAtOurLastLine = gameState.getOnFirstLine(color == GameLogic.BLACK ? GameLogic.WHITE : GameLogic.BLACK);
+        boolean isEnemyAtOurLastLine = enemyCheckersAmountAtOurLastLine == 0 ? false : true;
+        int ourCheckersAmountAtOurFirstLine = gameState.getOnFirstLine(color);
+        boolean isOurNotAtOurFirstLine = ourCheckersAmountAtOurFirstLine == 0 ? true : false;
+        
+        int enemyColor = color == GameLogic.BLACK ? GameLogic.WHITE : GameLogic.BLACK;
+        
+        for (int i = 0; i < GameLogic.HORIZONTAL_CELL_AMOUNT; i++) {
+            if (field[i][ourLastLine] == color) {
+                if (!isEnemyAtOurLastLine || i == 0 || i == GameLogic.HORIZONTAL_CELL_AMOUNT-1 ||
+                    (i < GameLogic.HORIZONTAL_CELL_AMOUNT-1 && field[i+1][ourLastLine] == color) || 
+                    (i > 0 && field[i-1][ourLastLine] == color)) {
+                    estimate += 600;
+                } else {
+                    estimate -= 900;
+                }
+            }
+            if (field[i][enemyLastLine] == enemyColor) {
+                if (isOurNotAtOurFirstLine || i == 0 || i == GameLogic.HORIZONTAL_CELL_AMOUNT-1 ||
+                    (i < GameLogic.HORIZONTAL_CELL_AMOUNT-1 && field[i+1][enemyLastLine] == enemyColor) || 
+                    (i > 0 && field[i-1][enemyLastLine] == enemyColor)) {
+                    estimate -= 1100;
+                } else {
+                    // Reaction to undefended bonus checkers:
+                    // 0 - often checkers are not allowed, except rare cases. Acceptable for the average difficulty.
+                    // -50 -  all checkers are not allowed. Acceptable for the hard difficulty.
+                    estimate -= tax;
+                }
+            }
+        }
+        
+        return estimate;
+    }
 	//----AI_v3---------------------------------------------
 	private static int[] defineArray(int moves_amount) {
 		int[] arr = new int[] {0, 1, 2, 3, 4};

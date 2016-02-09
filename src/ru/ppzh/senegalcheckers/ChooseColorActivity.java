@@ -21,28 +21,26 @@ public class ChooseColorActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_choose_color);
-		
-		//---Обработчик кнопки БЕЛЫЕ---
+        
 		mWhiteButton = (Button) findViewById(R.id.white_button);
 		mWhiteButton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(ChooseColorActivity.this, PlayActivity.class);
-				i.putExtra(PlayActivity.PLAY_MODE_EXTRA, GameLogic.MODE_HUMAN_WHITE); 	// игрок решил играть белыми
+				i.putExtra(PlayActivity.PLAY_MODE_EXTRA, GameLogic.MODE_HUMAN_WHITE);
 				startActivity(i);
 				finish();	
 			}
 		});
 		
-		//---Обработчик кнопки ЧЕРНЫЕ---
 		mBlackButton = (Button) findViewById(R.id.black_button);
 		mBlackButton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(ChooseColorActivity .this, PlayActivity.class);
-				i.putExtra(PlayActivity.PLAY_MODE_EXTRA, GameLogic.MODE_HUMAN_BLACK);	// игрок решил играть черными
+				i.putExtra(PlayActivity.PLAY_MODE_EXTRA, GameLogic.MODE_HUMAN_BLACK);
 				startActivity(i);
 				finish();
 			}

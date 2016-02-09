@@ -3,10 +3,8 @@ package ru.ppzh.senegalcheckers;
 import android.util.Log;
 
 public class GameLogic {
-	//Тэг для вывода в лог информации о завершении игры.
 	public static final String ENDGAME = "endgame";
 	
-	//константы
 	public static final int WHITE = 1;
 	public static final int BLACK = 2;
 	public static final int DRAW = 3;
@@ -18,16 +16,16 @@ public class GameLogic {
 	public static final int MODE_HUMAN_BLACK = 2;
 	public static final int MODE_TWO_MACHINES = 3;
 	
-	
-	private boolean inverted;	// если белые начинают сверху(такое происходит, когда игрок выбирает черный цвет)
-								// цвета шашек нужно поменять местами, о чем говорит этот флаг
+	// The checkers colors should be inverted if the white checkers have started the game in the top.
+	private boolean inverted;	
+    
 	private int mode;
 	private int winner;			
 	private Player playerWhite;
 	private Player playerBlack;
 	private GameState gameState;
 	private static GameLogic gl = null;
-	private int moves_am = 0; // количество сделанных полуходов за матч
+	private int moves_am = 0;   // The amount of moves during the match.
 	
 	private GameLogic(int mode){
 		this.mode = mode;
@@ -67,7 +65,7 @@ public class GameLogic {
 			playerWhite = new AI_v3(WHITE, Player.MACHINE, inverted, ANALIZE_DEPTH);
 			break;
 			
-		// add new AIs here
+		// Add new AIs here.
 			
 		default:
 			playerWhite = new AI_v1(WHITE, Player.MACHINE, inverted, ANALIZE_DEPTH);
@@ -83,7 +81,7 @@ public class GameLogic {
 			playerBlack = new AI_v3(BLACK, Player.MACHINE, inverted, ANALIZE_DEPTH);
 			break;
 			
-		// add new AIs here
+		// Add new AIs here.
 				
 		default:
 			playerBlack = new AI_v1(BLACK, Player.MACHINE, inverted, ANALIZE_DEPTH);
@@ -111,14 +109,14 @@ public class GameLogic {
 			return null;
 		}
 	}
-	// Проверяет первые два условия конца игры
+	// Check 2 first conditions of the game's end.
 	public boolean defineEndGame(){
 		boolean endGame = false;
 		
 		//Log.i(ENDGAME, "white checkers - "+gameState.getWhite_checkers()+". black checkers - "+gameState.getBlack_checkers());
 		
-		// 1. Если срублена последняя шашка ИЛИ
-		// 2. Если игроки обошли друг друга
+		// 1. If the last checker were taken OR
+		// 2. If the players have passed for one another.
 		if ((gameState.getWhite_checkers() == 0) ||
 			(gameState.getBlack_checkers() == 0) ||
 			 gameState.checkersExchanged()) {
@@ -132,9 +130,9 @@ public class GameLogic {
 		return endGame;
 	}
 	
-	// Проверяет третье условие конца игры
+	// Check the third condition of the game's end.
 	public boolean currPlayerCantMove(){
-		// 3. Если игрок не может сделать ход.
+		// 3. If player can't to make a move.
 		if (getPlayer(gameState.getCurr_move()).getGameState().getMovesAmount() == 0) {
 			defineWinner();
 			return true;
@@ -149,7 +147,7 @@ public class GameLogic {
 			if (playerWhite.getAllPoints() < playerBlack.getAllPoints()) {
 				winner = BLACK;
 			} else {
-				winner = DRAW; // ничья
+				winner = DRAW;
 			}
 		}
 		if (inverted){

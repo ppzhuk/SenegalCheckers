@@ -17,31 +17,31 @@ import android.view.View;
 import android.widget.TextView;
 
 public class PlayFieldView extends View {
-	//Тэг для вывода в лог информации о выбранной(по тапу) шашке.
 	public static final String MOVES = "moves";
 
 	private final float LINE_WIDTH = 5;
 	private final int MACHINE_TURN_TIME = 650;
 	
-	private Paint paint;				// кисть для отрисовки сетки
-	private Paint paintWhiteCheckers;	// кисть для отрисовки белых шашек
-	private Paint paintBlackCheckers;	// ~ черных шашек
+	private Paint paint;
+	private Paint paintWhiteCheckers;	
+	private Paint paintBlackCheckers;	
 	
 	private float cellWidth;
 	private float cellHeight;
 	private float checkerRadius;
 	
 	private GameLogic gameLogic;
-	private GameState gameState;  // GameState, который внутри gameLogic
-	private Player currPlayer;    // игрок, который ходит
+	private GameState gameState;  
+	private Player currPlayer;    
 	
-	// набор переменных для обработки касания игрового поля
-	private boolean chosen = false;	// выбрана ли шашка, которая будет делать ход
-	private int chosenI;			// её координаты
+	private boolean chosen = false;	    // If player chose a checker.
+	private int chosenI;			    // Its coordinates.
 	private int chosenJ;
-	private boolean endMove = true;	// если шашка рубит >1 чужой шашки подряд, ход проходит в несколько касаний
-	private Moves move;			// описывает выбранную шашку и ее ходы
-	private boolean draw_moves = false;	//флаг, отвечающий за отрисовку ходов для выбранной шашки
+    
+	private boolean endMove = true;	    // If chosen checker takes more than one enemy's checker at once 
+                                        // than move must be performed in several touches.
+	private Moves move;			        // Define moves of chosen checker.
+	private boolean draw_moves = false;	// if should draw allowed moves.
 	
 	private TextView player_one_points;
 	private TextView player_two_points;
@@ -52,10 +52,10 @@ public class PlayFieldView extends View {
 	private Handler handler = new Handler();
 	
 	private boolean touchable;
-	private boolean terminated = false; // если активность-хост уничтожена
+	private boolean terminated = false; // If host activity was terminated
 	
 	
-	// инфа для AI x AI режима
+	//-- vars for AI vs AI mode
 	private int games_amount = -1;
 	private int games_played = 0;
 	private int whiteAI = -1;
@@ -99,13 +99,13 @@ public class PlayFieldView extends View {
 	
 	@Override
 	protected void onDraw(Canvas canvas) {
-		getCellDimentions(canvas);	// определяем размеры ячеек игрового поля
-		if (draw_moves) {			// если необходимо, отрисовываем разрешенные ходы для выбранной шашки
-			drawMoves(canvas);		// если рисовать перед drawLines, получается красивее
+		getCellDimentions(canvas);	
+		if (draw_moves) {			
+			drawMoves(canvas);		
 		}
-		canvas.drawLines(getPlayGridCoord(canvas), paint);	// рисуем линии поля
-		drawCheckers(canvas);								// рисуем шашки
-		if (draw_moves) {			// если необходимо, обводим выбранную шашку
+		canvas.drawLines(getPlayGridCoord(canvas), paint);	
+		drawCheckers(canvas);								
+		if (draw_moves) {			// Outline chosen checker if needed. 
 			drawChosenChecker(canvas);
 		}
 		super.onDraw(canvas);
@@ -115,7 +115,7 @@ public class PlayFieldView extends View {
 		int h = canvas.getHeight();
 		int w = canvas.getWidth();
 		
-							// coordinates for vertical lines
+							// Coordinates for vertical lines.
 		float[] gridCoords = {LINE_WIDTH/2, 0, 	   LINE_WIDTH/2, h, 
 							  1*cellWidth, 0,      1*cellWidth, h,
 							  2*cellWidth, 0,      2*cellWidth, h,
@@ -123,7 +123,7 @@ public class PlayFieldView extends View {
 							  4*cellWidth, 0,      4*cellWidth, h,
 							  5*cellWidth, 0,      5*cellWidth, h,
 							  w-(LINE_WIDTH/2), 0, w-(LINE_WIDTH/2), h,
-							// coordinate for horizontal lines
+							// Coordinate for horizontal lines.
 							  0, LINE_WIDTH/2, 	   w, LINE_WIDTH/2,
 							  0, 1*cellHeight,     w, 1*cellHeight,
 							  0, 2*cellHeight, 	   w, 2*cellHeight,
@@ -133,7 +133,7 @@ public class PlayFieldView extends View {
 		return gridCoords;
 	}
 
-	// определение размеров ячейки поля на основе размеров вьюшки
+	// Define cell dimensions.
 	private void getCellDimentions(Canvas canvas) {
 		cellWidth = (float)(canvas.getWidth()/GameLogic.HORIZONTAL_CELL_AMOUNT);
 		cellHeight = (float)(canvas.getHeight()/GameLogic.VERTICAL_CELL_AMOUNT);
@@ -143,7 +143,6 @@ public class PlayFieldView extends View {
 		
 	}
 
-	// отрисовка всех шашек
 	private void drawCheckers(Canvas c) {
 		int[][] field;
 
@@ -156,7 +155,7 @@ public class PlayFieldView extends View {
 					if (field[i][j] == 1) {
 						
 
-						/* отрисовка заданного изображения вместо обычного круга
+						/* Draw image instead of circle
 					    Rect r = new Rect();
 						r.set((int)(i*cellWidth+(float)(cellWidth/2)-checkerRadius), (int)(j*cellHeight+(float)(cellHeight/2)-checkerRadius),
 							  (int)(i*cellWidth+(float)(cellWidth/2)+checkerRadius), (int)(j*cellHeight+(float)(cellHeight/2)+checkerRadius));
@@ -166,7 +165,7 @@ public class PlayFieldView extends View {
 					}
 					if (field[i][j] == 2) {
 						
-						/* отрисовка заданного изображения вместо обычного круга
+						/* Draw image instead of circle
 					    Rect r = new Rect();
 						r.set((int)(i*cellWidth+(float)(cellWidth/2)-checkerRadius), (int)(j*cellHeight+(float)(cellHeight/2)-checkerRadius),
 							  (int)(i*cellWidth+(float)(cellWidth/2)+checkerRadius), (int)(j*cellHeight+(float)(cellHeight/2)+checkerRadius));
@@ -186,7 +185,6 @@ public class PlayFieldView extends View {
 
 	}
 	
-	// рисует выбранную шашку
 	private void drawChosenChecker(Canvas c){
 		Paint p = new Paint();
 		p.setStrokeWidth(LINE_WIDTH);
@@ -195,7 +193,7 @@ public class PlayFieldView extends View {
 		drawCircle(move.getI(), move.getJ(), c, p);
 	}
 	
-	// рисует разрешенные ходы для выбранной шашки
+    // Draw allowed moves for chosen checker.
 	private void drawMoves(Canvas c){
 		Paint p = new Paint();
 		p.setStrokeWidth(LINE_WIDTH);
@@ -214,23 +212,23 @@ public class PlayFieldView extends View {
 	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if (touchable) {	// обрабатываем касания, только если он разрешены
+		if (touchable) {	// Proccess touches only if they are allowed.
 			int x = (int)(event.getX()/cellWidth);
 			int y = (int)(event.getY()/cellHeight);
 			
-			// получаем координаты шашки которая будет делать ход,
-			// а также информацию о возможных ходах для данной шашки (переменная move)
+			// Get coordinates of the checker that is about to be moved
+			// and info about it's allowed moves (variable move)
 			if ((endMove) && (gameLogic.getGameState().getField()[x][y] == gameLogic.getGameState().getCurr_move())) {
 				chosen = true;
 				chosenI = x;
 				chosenJ = y;
 				move = currPlayer.getGameState().getMoves()[chosenI][chosenJ];
 				
-				// место для отрисовки выбранной шашки и ее ходов
+				// Place for drawing chosen checker and its moves.
 				draw_moves = true;
 				invalidate();
 				
-				//debugging
+				// debugging
 				/*Log.i(MOVES, "checker with coord: "+x+" "+y+" is choosen");
 				for (int i = 0; i < move.getN(); i++) {
 					Log.i(MOVES, "it can go to: "+move.getPoint().get(i).getX()+" "+move.getPoint().get(i).getY());
@@ -238,8 +236,8 @@ public class PlayFieldView extends View {
 				//-------
 				
 			} else {
-				// если шашка была выбрана предыдущим касанием,
-				// проверяем может ли быть совершен ход по полученным от касания координатам.
+				// If some checker was chosen with previous touch,
+				// check if it can be moved to coordinates received by this touch.
 				if(chosen) {
 					boolean allow = false;
 					int k = 0;
@@ -251,7 +249,8 @@ public class PlayFieldView extends View {
 						}
 						m++;
 					}
-					// если ход разрешен, то вносим соответствующие изменения в игровую логику и перерисовываем поле.
+                    
+					// If move is allowed than make appropriate changes in game logic and redraw the field.
 					if (allow) {
 						
 						//Log.i(MOVES, "checker moved to "+x+" "+y);
@@ -263,22 +262,23 @@ public class PlayFieldView extends View {
 						gameLogic.setPoints(currPlayer.getColor());
 						gameLogic.setBonuses();
 						updatePointsLabels();
-						// проверяем, можно ли продолжить ход
-						if (move.getNext().get(k).getN() == 0) { // ход продложить нельзя
-							endMove = true;						 // вносим соотв. изменения и меняем игрока 
+                        
+						// Check if this move can be continued.
+						if (move.getNext().get(k).getN() == 0) { // if it can not ...
+							endMove = true;						 // make appropriate changes and switch player.
 							chosen = false;
 							
 							//Log.i(MOVES, "Move ends. Change player");
 
-							// так как ход закончен, рисуем без обвода шашки и ее ходов.						
+							// Reset checker's outline and its moves.						
 							draw_moves = false;
 							invalidate();
 							
 							changePlayer();
-						} else {								// ход можно продолжить.
+						} else {								// if it can ...
 							move = move.getNext().get(k);
 							
-							// место для отрисовки выбранной фигуры и ее ходов
+							// Place for drawing chosen checker and its moves.
 							draw_moves = true;
 							invalidate();
 							
@@ -298,7 +298,6 @@ public class PlayFieldView extends View {
 		return false;
 	}
 
-	// получает игровую логику
 	public void setGameLogic(GameLogic gameLogic) {
 		this.gameLogic = gameLogic;
 		gameState = gameLogic.getGameState();
@@ -315,14 +314,14 @@ public class PlayFieldView extends View {
 		 
 		
 		/*
-		// установить специальное условия начала игры
+		// Set special conditions for the game start.
 		for (int i = 0; i < GameLogic.HORIZONTAL_CELL_AMOUNT; i++) {
 			for (int j = 0; j < GameLogic.VERTICAL_CELL_AMOUNT; j++) {
 				gameLogic.getGameState().getField()[i][j] = 0;
 			}
 		}
 		
-		// Задаем положение, которое нужно проверить
+		// Set checkers position wanted to be checked.
 		//win
 		gameLogic.getGameState().getField()[0][0] = 2;
 		gameLogic.getGameState().getField()[5][0] = 2;
@@ -355,7 +354,7 @@ public class PlayFieldView extends View {
 
 	}
 	
-	// отображение заработанных игроками очков
+	// Redraw players' points.
 	private void updatePointsLabels(){
 		if (!gameLogic.isInverted()) {
 			player_one_points.setText(""+gameLogic.getPlayer(GameLogic.WHITE).getPoints());
@@ -395,10 +394,9 @@ public class PlayFieldView extends View {
 		player_two_bonus_points = (TextView)bonus_points_2;
 	}
 	
-	// Меняет игрока на противоположного, предварительно проверив признаки завершения игры.
+	// Switch player after checking if game not ended.
 	private void changePlayer(){
-		touchable = false;	// запрет на обработку касаний
-		// проверяет, остались ли шашки и не обменялись ли шашки местами
+		touchable = false;	
 		if (gameLogic.defineEndGame()) {
 			gameOver();
 		} else {
@@ -412,9 +410,7 @@ public class PlayFieldView extends View {
 			}
 			
 			updateCurrMoveLabel();
-			// В начале партии у обоих игроков в gameState стоит нужный цвет.
-			// Поэтому после первого хода мы просто копируем общий gs в gs игрока
-			// В остальных случаях вызываем спец метод.
+
 			if (gameLogic.getMovesAmount() < 2) {
 				currPlayer.getGameState().copy(gameState);
 			} else {
@@ -425,10 +421,9 @@ public class PlayFieldView extends View {
 		}
 	}
 
-	// оповещает о конце игры
 	private void gameOver() {
 		int winner = gameLogic.getWinner();	
-		if (gameLogic.getMode() == GameLogic.MODE_TWO_MACHINES) {	//если играет две машины, то
+		if (gameLogic.getMode() == GameLogic.MODE_TWO_MACHINES) {	// if  both players are AIs ...
 			switch (winner){
 			case GameLogic.WHITE: white_wins++;
 								  break;
@@ -436,7 +431,7 @@ public class PlayFieldView extends View {
 								  break;
 			default: draws++;
 			}
-			if (++games_played == games_amount) {		// собираем статистику
+			if (++games_played == games_amount) {		// ... gather statistics ...
 				float average_moves_per_game = 0;
 				for(int i: moves_per_game) average_moves_per_game+=i;
 				average_moves_per_game/=(games_amount*1.0);
@@ -450,20 +445,20 @@ public class PlayFieldView extends View {
 				i.putExtra(MachinesStatisticsActivity.AVERAGE_MOVES_EXTRA, average_moves_per_game);
 				((PlayActivity)this.getContext()).startStatisticsActivity(i);
 
-			} else {						//отыгрываем заданное число игр
+			} else {						// ... restart game.
 				GameLogic gl = GameLogic.newInstance(GameLogic.MODE_TWO_MACHINES, whiteAI, blackAI);
 				setGameLogic(gl);
 				System.gc();
 				updateCurrMoveLabel();
 				Move();
 			}
-		} else {
+		} else {    // Show final dialog.
 			int final_speech;
 			switch (winner){
-			case GameLogic.WHITE: final_speech = R.string.Player1won;
-								  break;
-			case GameLogic.BLACK: final_speech = R.string.Player2won;
-								  break;
+                case GameLogic.WHITE: final_speech = R.string.Player1won;
+                                      break;
+                case GameLogic.BLACK: final_speech = R.string.Player2won;
+                                      break;
 			default: final_speech = R.string.Draw;
 			}	
 
@@ -473,25 +468,26 @@ public class PlayFieldView extends View {
 		}
 	}
 	
-	// определение возможных ходов для человека и совершение хода для машины
+
 	public void Move(){
 		gameLogic.movesAmountInc();
 		if (!isTerminated()) {
-			new Thread(new Runnable() {  //определение ходов производим отдельным потоком, чтобы UI-поток не подвисал
+			new Thread(new Runnable() {  // Moves tree should be built in separate thread.
 
 				@Override
 				public void run() {
 					
+                    
 					long time_start = System.nanoTime()/1000000;
 					currPlayer.defineMoves();							
 					long time_finish = System.nanoTime()/1000000;
-					long time_delta = time_finish - time_start;		// определяем время, пораченное на defineMoves()
+					long time_delta = time_finish - time_start;		
 					
-					Log.i("move_time", "Ходил "+currPlayer.getWho()+". Время, пораченное на defineMoves(): "+time_delta+ " milliseconds.");
+					Log.i("move_time", "Move "+currPlayer.getWho()+". Time for defineMoves(): "+time_delta+ " milliseconds.");
 					
 					if (gameLogic.currPlayerCantMove()) {
-						handler.post(new Runnable() {					// если игра закончилась, сообщение выводим в UI-треде
-																		// (handler создавался в UI-треде => c ним ассоциирован)
+						handler.post(new Runnable() {	// End game message post in UI-thread.
+
 							@Override
 							public void run() {
 								gameOver();					
@@ -500,16 +496,16 @@ public class PlayFieldView extends View {
 						});					
 					} else {
 						if (currPlayer.getWho() == Player.MACHINE) {
-						
-							if (time_delta < MACHINE_TURN_TIME){		// если время потраченное на определение хода меньше 
-								try {									// MACHINE_TURN_TIME, то усыпляем поток на некоторое время
+							// AI takes >= MACHINE_TURN_TIME to make one move.
+							if (time_delta < MACHINE_TURN_TIME){
+								try {									
 									Thread.sleep(MACHINE_TURN_TIME - time_delta);
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}
 							}
 							
-							handler.post(new Runnable() {	// все изменения интерфейса также в UI-треде
+							handler.post(new Runnable() {	// All UI changes should be done in UI-thread.
 								
 								@Override
 								public void run() {		
@@ -529,7 +525,7 @@ public class PlayFieldView extends View {
 							});	
 						}	
 					}
-					touchable = true;	// разрешение обработки касаний
+					touchable = true;
 				}
 			}).start();
 		}

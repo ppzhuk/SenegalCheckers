@@ -43,8 +43,8 @@ public class PlayActivity extends Activity {
 		int games_amount = getIntent().getIntExtra(GAMES_AMOUNT_EXTRA, -1);
 		int whiteAI = getIntent().getIntExtra(WHITE_AI_EXTRA, -1);
 		int blackAI = getIntent().getIntExtra(BLACK_AI_EXTRA, -1);
-		//mode содержит информацию о режиме игры. ѕодробнее в GameLogic-классе
 		int mode = getIntent().getIntExtra(PLAY_MODE_EXTRA, -1);
+        
 		if (mode < 4 && mode > -1) {
 			if (mode == GameLogic.MODE_TWO_MACHINES) {
 				gameLogic = GameLogic.newInstance(mode, whiteAI, blackAI);
@@ -55,17 +55,16 @@ public class PlayActivity extends Activity {
 			playField.setTwoMachinesInfo(games_amount, whiteAI, blackAI);
 			playField.setGameLogic(gameLogic);		
 
-			// ѕередаем текстовые пол€ дл€ управлени€ ими из playField
 			playField.setLabels(this.findViewById(R.id.player1_score_textView),
 								this.findViewById(R.id.player2_score_textView),
 								this.findViewById(R.id.whose_turn), 
 								this.findViewById(R.id.player1_bonus_score_textView), 
 								this.findViewById(R.id.player2_bonus_score_textView));
 			
-			// в зависимости от режима игры определ€ем начальное содержание текстовых полей на экране 
+			// Define labels content in accordance with game mode.
 			defineViews(mode);
 			
-			// выполн€ем действи€, необходимые дл€ первого хода.
+			// Initiate first move.
 			playField.Move();
 			
 		} else {

@@ -7,34 +7,33 @@ import android.util.Log;
 public class GameState {
 	private int START;
 	private int STOP;
-	
-	// количество белых и черных шашек
+    
 	private int white_checkers;
 	private int black_checkers;
-	// цвет игрока, для которого расчитывается ход
-	// При построении дерева для игрока-машины, цвет игрока меняется с каждым уровнем 
+    // Player color which is about to make a move. The color changes every level of the tree moves.
 	private int curr_move;
-	// игровое поле для текущей позиции
+	// Playfiled for the current gamestate.
 	private int[][] field;
-	// массив, хранящий деревья резрешенных ходов для каждой шашки цвета curr_move
-	private Moves[][] moves;
-	private boolean cut;		// флаг, говорит о наличии возможности взять шашку противника
-	private int maxDepth;		// максимальное количество вражеских шашек, которое можно взять за раз
+	private Moves[][] moves;    // Trees of allowed moves for every checker with color curr_move.
+	private boolean cut;		// Ability to take enemy checker.
+	private int maxDepth;		// Max amount of the enemy checkers that you can take for one move.
 	
-	private int movesAmount;  // oбщее количество ходов, возможных в данном положении
-	private int estimate; 	  // оценка узла
-	private ArrayList<GameState> next;	// дочерние узлы для построения дерева анализа
-	private GameState prev = null;		// ссылка на родителя в дереве анализа
+	private int movesAmount;  // Amount of allowed moves in current position.
+	private int estimate; 	  
+	private ArrayList<GameState> next;	// Childs nodes for building the moves tree.
+	private GameState prev = null;		
 	
-	private ArrayList<Moves> movesline;  // используется при логгировании информации о построеном дереве
+    private boolean inverted;
+        
+    //--- for logging---
+	private ArrayList<Moves> movesline;  
 	private ArrayList<Integer> moveindex;
-	
-	private boolean inverted;
+	//-----------------
 
 	public GameState() {
 		white_checkers = 14;
 		black_checkers = 14;
-		movesAmount = -1;   // -1 - значит ходы еще не были определены для данного GameState
+		movesAmount = -1;   // -1 - moves weren't defined for this GameState.
 		estimate = -1;
 		inverted = false;
 		curr_move = GameLogic.WHITE;
@@ -77,7 +76,7 @@ public class GameState {
 		this.inverted = inverted;
 		white_checkers = 14;
 		black_checkers = 14;
-		movesAmount = -1;	// -1 - значит ходы еще не были определены для данного GameState
+		movesAmount = -1;
 		estimate = -1;
 		curr_move = GameLogic.WHITE;
 		next = new ArrayList<GameState>();
@@ -137,7 +136,7 @@ public class GameState {
 	}
 	// ----
 	
-	// строит матрицу возможных ходов для текущего состояния
+    // Build the marix of possible moves for current gamestate.
 	public void defineMoves(){
 		maxDepth = 0;
 		movesAmount = 0;
@@ -148,8 +147,8 @@ public class GameState {
 			}
 		}
 		defineStartStop();
-		defineCuts();		// строим дерево для взятия вражеских шашек		
-		if (!cut) {			// если нет вражеских шашек для взятия, определяем обычные ходы
+		defineCuts();		
+		if (!cut) {			
 			for (int i = 0; i < GameLogic.HORIZONTAL_CELL_AMOUNT; i++) {
 				for (int j = START; j < STOP; j++) {
 					if (field[i][j] == curr_move) {
@@ -159,7 +158,7 @@ public class GameState {
 			}
 		}
 		
-		// посчитать общее количесво ходов 
+		// define the amount of allowed moves
 		for (int i = 0; i < GameLogic.HORIZONTAL_CELL_AMOUNT; i++) {
 			for (int j = 0; j < GameLogic.VERTICAL_CELL_AMOUNT; j++) {
 				if (moves[i][j].getN() > 0) {
@@ -170,7 +169,7 @@ public class GameState {
 		
 	}
 	
-	// Для каждой шашки опеделяем сколько подряд вражеских шашек она может срубить 
+	// Define the amount of checkers that can be taken at once.
 	private void defineCuts() {
 		for (int i = 0; i < GameLogic.HORIZONTAL_CELL_AMOUNT; i++) {
 			for (int j = START; j < STOP; j++) {
@@ -179,7 +178,7 @@ public class GameState {
 				}
 			}
 		}
-		// если есть шашки, подлежащие срубу, тога оставляем только самые длинные ходы
+		// If there are checkers to be taken, left the longest chains.
 		if (cut) {
 			for (int i = 0; i < GameLogic.HORIZONTAL_CELL_AMOUNT; i++) {
 				for (int j = START; j < STOP; j++) {
@@ -193,7 +192,6 @@ public class GameState {
 		}
 	}
 
-	// удаляем запрещенные ходы, оставляем только самую(ые) длинную(ые) цепочку(и) ходов.
 	private boolean removeForbittenCuts(Moves move) {
 		int k = 0;
 		while (k < move.getN()) {
@@ -213,7 +211,7 @@ public class GameState {
 	}
 	
 	
-	// для заданной шашки строит дерево взятия вражеских шашек
+	// Build "cuts tree" for particular checker.
 	private void getCutsTree(int i, int j, Moves move, int[][] field, int depth) {
 		int[][] myfield;
 		
@@ -222,9 +220,9 @@ public class GameState {
 		move.setDepth(depth);
 		maxDepth = (depth > maxDepth) ? depth : maxDepth;
 		
-		//проверяем сверху
+		// check up
 		if (canCut(field, i, j-1, 1)) {
-			// копируем поле field и вносим изменения
+			// Add changes and make recursive call.
 			myfield = field.clone();
 			for (int k = 0; k < field.length; k++) {
 				myfield[k] = field[k].clone();
@@ -233,7 +231,6 @@ public class GameState {
 			myfield[i][j-1] = 0;
 			myfield[i][j-2] = curr_move;
 			
-			// добавляем информацию о возможном ходе и вызываем рекурсию
 			move.getPoint().add(new Point());
 			move.getPoint().get(move.getN()).setX(i);
 			move.getPoint().get(move.getN()).setY(j-2);
@@ -245,9 +242,8 @@ public class GameState {
 			move.increaseN();
 			cut = true;
 		}
-		//проверяем снизу
+		// check down
 		if (canCut(field, i, j+1, 2)) {
-			// копируем поле field и вносим изменения
 			myfield = field.clone();
 			for (int k = 0; k < field.length; k++) {
 				myfield[k] = field[k].clone();
@@ -256,7 +252,6 @@ public class GameState {
 			myfield[i][j+1] = 0;
 			myfield[i][j+2] = curr_move;
 			
-			// добавляем информацию о возможном ходе и вызываем рекурсию
 			move.getPoint().add(new Point());
 			move.getPoint().get(move.getN()).setX(i);
 			move.getPoint().get(move.getN()).setY(j+2);
@@ -268,9 +263,8 @@ public class GameState {
 			move.increaseN();
 			cut = true;	
 		}
-		//проверяем слева
+		// check left
 		if (canCut(field, i-1, j, 3)) {
-			// копируем поле field и вносим изменения
 			myfield = field.clone();
 			for (int k = 0; k < field.length; k++) {
 				myfield[k] = field[k].clone();
@@ -279,7 +273,6 @@ public class GameState {
 			myfield[i-1][j] = 0;
 			myfield[i-2][j] = curr_move;
 			
-			// добавляем информацию о возможном ходе и вызываем рекурсию
 			move.getPoint().add(new Point());
 			move.getPoint().get(move.getN()).setX(i-2);
 			move.getPoint().get(move.getN()).setY(j);
@@ -291,9 +284,8 @@ public class GameState {
 			move.increaseN();
 			cut = true;
 		}
-		//проверяем справа
+		// check right
 		if (canCut(field, i+1, j, 4)) {
-			// копируем поле field и вносим изменения
 			myfield = field.clone();
 			for (int k = 0; k < field.length; k++) {
 				myfield[k] = field[k].clone();
@@ -302,7 +294,6 @@ public class GameState {
 			myfield[i+1][j] = 0;
 			myfield[i+2][j] = curr_move;
 			
-			// добавляем информацию о возможном ходе и вызываем рекурсию
 			move.getPoint().add(new Point());
 			move.getPoint().get(move.getN()).setX(i+2);
 			move.getPoint().get(move.getN()).setY(j);
@@ -316,9 +307,9 @@ public class GameState {
 		}
 	}
 	
-	// определяем, в каком из 4ех направлений может двигаться шашка
+	// Define witch direction checker can move.
 	private void getMovesTree(int i, int j, Moves move){
-		// шаг вверх (только для шешек того цвета, которые располагались внизу)
+		// check up
 		if ((((curr_move == GameLogic.WHITE) && !inverted) ||
 			 ((curr_move == GameLogic.BLACK) && inverted)) && canMove(i, j-1)) {
 			move.getPoint().add(new Point());
@@ -329,7 +320,7 @@ public class GameState {
 			
 			//Log.i("moves_tree", "checker wint coord: "+i+" "+j+" - can go up");
 		}
-		// шаг вниз (только для шешек того цвета, которые располагались вверху)
+		// check down
 		if ((((curr_move == GameLogic.BLACK) && !inverted) ||
 			 ((curr_move == GameLogic.WHITE)) && inverted) && canMove(i, j+1)) {
 			move.getPoint().add(new Point());
@@ -340,7 +331,7 @@ public class GameState {
 			
 			//Log.i("moves_tree", "checker wint coord: "+i+" "+j+" - can go down");
 		}
-		//шаг влево
+		// check left
 		if (canMove(i-1, j)) {
 			move.getPoint().add(new Point());
 			move.getPoint().get(move.getN()).setX(i-1);
@@ -350,7 +341,7 @@ public class GameState {
 			
 			//Log.i("moves_tree", "checker wint coord: "+i+" "+j+" - can go left");
 		}
-		//шаг вправо
+		// check right
 		if (canMove(i+1, j)) {
 			move.getPoint().add(new Point());
 			move.getPoint().get(move.getN()).setX(i+1);
@@ -362,10 +353,7 @@ public class GameState {
 		}
 	}
 	
-	// проверяет: 1. попадаем ли точка I J на игровое поле. 
-	// 2. Находится ли на этой точке вражеская шашка
-	// 3. В зависимости от направления предполагаемого сруба (задается параметром k)
-	//    определяет, может ли он быть совершен.
+	// Define if checker can cut enemy check in particular direction (direction is given by k).
 	private boolean canCut(int[][] myfield, int I, int J, int k) {
 		if (I > -1 && I < GameLogic.HORIZONTAL_CELL_AMOUNT &&
 			J > -1 && J < GameLogic.VERTICAL_CELL_AMOUNT) {
@@ -386,7 +374,7 @@ public class GameState {
 		return false;
 	}
 	
-	// проверяет, попадает ли точка с координатами i j на поле, и является ли она свободной
+	// Define if a particular cell is free from any checkers.
 	private boolean canMove(int i , int j){
 		if (i > -1 && i < GameLogic.HORIZONTAL_CELL_AMOUNT &&
 			j > -1 && j < GameLogic.VERTICAL_CELL_AMOUNT) {
@@ -397,7 +385,7 @@ public class GameState {
 		return false;
 	}
 
-	// в зависимости от цвета, запрещаем определение ходов для шашек на финальной линии.
+	// Forbid bonus checkers to move on the last line.
 	private void defineStartStop() {
 		if (!inverted) {
 			if (curr_move == GameLogic.WHITE) {
@@ -419,43 +407,42 @@ public class GameState {
 		
 	}
 	
-	// вносит изменение в поле при совершении хода.
-	// I J - начальные координаты шашки 
-	// p - точка назначения
+	// Make changes after move:
+	// I J - origin coordinates
+	// p - target coordinates
 	public void changeField(int I, int J, Point p){
 		field[I][J] = 0;
 		field[p.getX()][p.getY()] = curr_move;
 		
-		//определяем был ли это сруб или обычный ход
-		boolean isCut = false;		// флаг для сруба
-		int diffX = I - p.getX();	// направление возможного сруба
+		// Define if it was taking or usual move.
+		boolean isCut = false;		
+		int diffX = I - p.getX();	
 		int diffY = J - p.getY();
 		if (diffX == 0) {
-			//up
+			// up
 			if (diffY == 2) {
 				isCut = true;
 				field[I][J-1] = 0;
 			}
-			//down
+			// down
 			if (diffY == -2) {
 				isCut = true;
 				field[I][J+1] = 0;
 			}
 		}
 		if (diffY == 0){
-			//left
+			// left
 			if (diffX == 2) {
 				isCut = true;
 				field[I-1][J] = 0;
 			}
-			//right
+			// right
 			if (diffX == -2) {
 				isCut = true;
 				field[I+1][J] = 0;
 			}
 		}
 		
-		// изменение количества шашек на доске, если был сруб
 		if(isCut){
 			if (curr_move == GameLogic.WHITE) black_checkers--;
 			if (curr_move == GameLogic.BLACK) white_checkers--;
@@ -463,7 +450,7 @@ public class GameState {
 	}
 	
 	
-	// копируем из переданного GameState 4 основыне параметра
+	// Copy main parameters from gamestate.
 	public void copy(GameState gs){
 		white_checkers = gs.white_checkers;
 		black_checkers = gs.black_checkers;
@@ -476,7 +463,7 @@ public class GameState {
 		next.clear();
 	}
 
-	// проверяет, не обменялись ли шашки местами друг с другом
+	// Check if players have passed one another.
 	public boolean checkersExchanged(){
 		int white_line;
 		int black_line;
@@ -513,7 +500,6 @@ public class GameState {
 		return false;
 	}
 	
-	// получить шашки, находящиеся на последней (для цвета color) линии
 	public int getOnFinalLine(int color){
 		int n = 0;
 		int j;
@@ -531,7 +517,6 @@ public class GameState {
 		return n;
 	}
 
-	// получить шашки, находящиеся на первой (для цвета color) линии
 	public int getOnFirstLine(int color){
 		int n = 0;
 		int j;

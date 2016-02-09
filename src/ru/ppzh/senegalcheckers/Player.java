@@ -1,7 +1,5 @@
 package ru.ppzh.senegalcheckers;
 
-// класс игрока человека.
-// Класс для игрока- машины необходимо наследовать от этого класса.
 public class Player {
 	public static final String MAN = "man";
 	public static final String MACHINE = "machine";
@@ -24,22 +22,16 @@ public class Player {
 		this.gameState.setCurr_move(color);
 	}
 	
-	// спускается на i-тый узел дерева. Используется в подклассе PlayerMachine
+	// Go down for one move.
 	public void changeState(int i) {
 		gameState = gameState.getNext().get(i);
 	}
 	
-	// Действия, необходимые для определения возможных ходов. 
 	public void defineMoves(){
 		gameState.defineMoves();
 	}
-	
-	// Определяется в PlayerMachine.
-	public void makeMove(){
-		// заглушка
-	}
-	
-	// Внесение изменений в gameState текущего игрока после хода противника. 
+		
+	// Get a gamestate after enemy move.
 	public void changeStateEnemyMove(GameState gs){
 		gameState.copy(gs);
 	}
@@ -76,5 +68,7 @@ public class Player {
 		this.points = points;
 	}
 	
-	
+	public void makeMove(){
+		
+	}
 }
