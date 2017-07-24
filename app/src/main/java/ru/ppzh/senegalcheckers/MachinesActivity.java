@@ -53,7 +53,7 @@ public class MachinesActivity extends Activity {
 			@Override
 			public void afterTextChanged(Editable s) {
 			
-				String ss = new String(s.toString()); 
+				String ss = s.toString();
 				if (ss.equals("")) {
 					games_amount = 1;	
 				} else {

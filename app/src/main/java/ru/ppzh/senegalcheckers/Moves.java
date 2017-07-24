@@ -13,8 +13,8 @@ public class Moves {
 	public Moves() {
 		n = 0;
 		depth = i = j = -1;
-		point = new ArrayList<Point>();
-		next = new ArrayList<Moves>();
+		point = new ArrayList<>();
+		next = new ArrayList<>();
 	}
 
 	public void increaseN(){

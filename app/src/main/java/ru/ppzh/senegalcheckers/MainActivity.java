@@ -102,7 +102,7 @@ public class MainActivity extends Activity {
 		}
 		
 		mCodeVersionView = (TextView) findViewById(R.id.code_version);
-		mCodeVersionView.setText("ver: " + mVersion);
+		mCodeVersionView.setText(("ver: " + mVersion));
 		
 	}
 }

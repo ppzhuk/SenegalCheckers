@@ -27,8 +27,7 @@ public class FinalDialog extends DialogFragment {
 	}
 
 	public static FinalDialog newInstance() {
-		FinalDialog fragment = new FinalDialog();
-		return fragment;
+		return new FinalDialog();
 	}
 	
 	public void setFinalSpeech(int final_speech){

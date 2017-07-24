@@ -20,7 +20,7 @@ public class GameState {
 	
 	private int movesAmount;  // Amount of allowed moves in current position.
 	private int estimate; 	  
-	private ArrayList<GameState> next;	// Childs nodes for building the moves tree.
+	private ArrayList<GameState> next;	// Childes nodes for building the moves tree.
 	private GameState prev = null;		
 	
     private boolean inverted;
@@ -37,9 +37,9 @@ public class GameState {
 		estimate = -1;
 		inverted = false;
 		curr_move = GameLogic.WHITE;
-		next = new ArrayList<GameState>();
-		movesline = new ArrayList<Moves>();
-		moveindex = new ArrayList<Integer>();
+		next = new ArrayList<>();
+		movesline = new ArrayList<>();
+		moveindex = new ArrayList<>();
 		moves = new Moves[GameLogic.HORIZONTAL_CELL_AMOUNT][GameLogic.VERTICAL_CELL_AMOUNT];
 		for (int i = 0; i < GameLogic.HORIZONTAL_CELL_AMOUNT; i++) {
 			for (int j = 0; j < GameLogic.VERTICAL_CELL_AMOUNT; j++) {
@@ -79,9 +79,9 @@ public class GameState {
 		movesAmount = -1;
 		estimate = -1;
 		curr_move = GameLogic.WHITE;
-		next = new ArrayList<GameState>();
-		movesline = new ArrayList<Moves>();
-		moveindex = new ArrayList<Integer>();
+		next = new ArrayList<>();
+		movesline = new ArrayList<>();
+		moveindex = new ArrayList<>();
 		moves = new Moves[GameLogic.HORIZONTAL_CELL_AMOUNT][GameLogic.VERTICAL_CELL_AMOUNT];
 		for (int i = 0; i < GameLogic.HORIZONTAL_CELL_AMOUNT; i++) {
 			for (int j = 0; j < GameLogic.VERTICAL_CELL_AMOUNT; j++) {
@@ -136,7 +136,7 @@ public class GameState {
 	}
 	// ----
 	
-    // Build the marix of possible moves for current gamestate.
+    // Build the matrix of possible moves for current game state.
 	public void defineMoves(){
 		maxDepth = 0;
 		movesAmount = 0;
@@ -183,19 +183,17 @@ public class GameState {
 			for (int i = 0; i < GameLogic.HORIZONTAL_CELL_AMOUNT; i++) {
 				for (int j = START; j < STOP; j++) {
 					if (field[i][j] == curr_move) {
-						if (removeForbittenCuts(moves[i][j])) {
-							// do nothing
-						}
+						removeForbiddenCuts(moves[i][j]);
 					}
 				}
 			}			
 		}
 	}
 
-	private boolean removeForbittenCuts(Moves move) {
+	private boolean removeForbiddenCuts(Moves move) {
 		int k = 0;
 		while (k < move.getN()) {
-			if (removeForbittenCuts(move.getNext().get(k))) {
+			if (removeForbiddenCuts(move.getNext().get(k))) {
 				move.getNext().remove(k);
 				move.getPoint().remove(k);
 				move.decreaseN();
@@ -203,11 +201,7 @@ public class GameState {
 				k++;
 			}
 		}
-		if ((move.getN() == 0) && (move.getDepth() < maxDepth)) {
-			return true;
-		} else {
-			return false;
-		}
+		return (move.getN() == 0) && (move.getDepth() < maxDepth);
 	}
 	
 	
@@ -464,7 +458,7 @@ public class GameState {
 	}
 
 	// Check if players have passed one another.
-	public boolean checkersExchanged(){
+	public boolean checkersExchanged() {
 		int white_line;
 		int black_line;
 		if (!inverted) {
@@ -472,7 +466,7 @@ public class GameState {
 			black_line = 0;
 		} else {
 			white_line = 0;
-			black_line = GameLogic.VERTICAL_CELL_AMOUNT - 1;			
+			black_line = GameLogic.VERTICAL_CELL_AMOUNT - 1;
 		}
 
 		for (int j = 0; j < GameLogic.VERTICAL_CELL_AMOUNT; j++) {
@@ -481,23 +475,18 @@ public class GameState {
 				if (inverted && (field[i][j] == 2)) black_line = j;
 			}
 		}
-		for (int j = GameLogic.VERTICAL_CELL_AMOUNT-1; j > -1; j--) {
+		for (int j = GameLogic.VERTICAL_CELL_AMOUNT - 1; j > -1; j--) {
 			for (int i = 0; i < GameLogic.HORIZONTAL_CELL_AMOUNT; i++) {
 				if (!inverted && (field[i][j] == 2)) black_line = j;
 				if (inverted && (field[i][j] == 1)) white_line = j;
 			}
 		}
-		
+
 		//Log.i(GameLogic.ENDGAME, "highest black line: "+black_line+". lowest white line: "+white_line);
-		
-		if (!inverted && (black_line > white_line+1)) {
-			return true;
-		}
-		if (inverted && (white_line > black_line+1)) {
-			return true;
-		}
-		
-		return false;
+
+		return !inverted && (black_line > white_line + 1) ||
+				inverted && (white_line > black_line + 1);
+
 	}
 	
 	public int getOnFinalLine(int color){

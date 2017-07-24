@@ -16,6 +16,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.Objects;
+
 public class PlayFieldView extends View {
 	public static final String MOVES = "moves";
 
@@ -495,7 +497,7 @@ public class PlayFieldView extends View {
 							
 						});					
 					} else {
-						if (currPlayer.getWho() == Player.MACHINE) {
+						if (Objects.equals(currPlayer.getWho(), Player.MACHINE)) {
 							// AI takes >= MACHINE_TURN_TIME to make one move.
 							if (time_delta < MACHINE_TURN_TIME){
 								try {									

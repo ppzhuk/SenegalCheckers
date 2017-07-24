@@ -7,7 +7,7 @@ public class Estimate {
 
 	//----AI_v1-----------------------------------------
 	// Return the amount of checkers of appropriate color.
-	public static int ChackersAmountEstimate(GameState gameState, int color){
+	public static int CheckersAmountEstimate(GameState gameState, int color){
 		return color == GameLogic.WHITE ? gameState.getWhite_checkers() : gameState.getBlack_checkers();
 	}
 	
@@ -30,7 +30,7 @@ public class Estimate {
 	}
 	
 	//----AI_v2-----------------------------------------
-	public static int ChackersAmountEstimateNew(GameState gameState, int color){
+	public static int CheckersAmountEstimateNew(GameState gameState, int color){
 		int estimate = 0;
 		switch (color) {
 		case GameLogic.WHITE:
@@ -57,7 +57,7 @@ public class Estimate {
 			if (color == GameLogic.BLACK) j = 0;	
 		}
 		int enemyCheckersAmount = gameState.getOnFirstLine(color == GameLogic.BLACK ? GameLogic.WHITE : GameLogic.BLACK);
-		boolean isEnemyNotAtFirstLine = enemyCheckersAmount == 0 ? true : false;
+		boolean isEnemyNotAtFirstLine = enemyCheckersAmount == 0;
 		for (int i = 0; i < GameLogic.HORIZONTAL_CELL_AMOUNT; i++) {
 			if (field[i][j] == color) {
 				if (isEnemyNotAtFirstLine || i == 0 || i == GameLogic.HORIZONTAL_CELL_AMOUNT-1 ||
@@ -113,9 +113,9 @@ public class Estimate {
         }
         
         int enemyCheckersAmountAtOurLastLine = gameState.getOnFirstLine(color == GameLogic.BLACK ? GameLogic.WHITE : GameLogic.BLACK);
-        boolean isEnemyAtOurLastLine = enemyCheckersAmountAtOurLastLine == 0 ? false : true;
+        boolean isEnemyAtOurLastLine = enemyCheckersAmountAtOurLastLine != 0;
         int ourCheckersAmountAtOurFirstLine = gameState.getOnFirstLine(color);
-        boolean isOurNotAtOurFirstLine = ourCheckersAmountAtOurFirstLine == 0 ? true : false;
+        boolean isOurNotAtOurFirstLine = ourCheckersAmountAtOurFirstLine == 0;
         
         int enemyColor = color == GameLogic.BLACK ? GameLogic.WHITE : GameLogic.BLACK;
         
@@ -218,10 +218,8 @@ public class Estimate {
 			}		
 		} catch (Exception e) {
 			Log.e(TAG, "GameLogic is null.");
-		} finally {
 			return 0;
 		}
-		
 	}
 	
 }

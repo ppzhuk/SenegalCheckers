@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 26
     buildToolsVersion "26.0.0"
 
     defaultConfig {
         applicationId "ru.ppzh.senegalcheckers"
         minSdkVersion 19
-        targetSdkVersion 22
+        targetSdkVersion 26
     }
 
     buildTypes {

@@ -112,8 +112,8 @@ public abstract class PlayerMachine extends Player {
 			gs.changeField(move.getI(), move.getJ(), move.getPoint().get(i));
 			
 			
-			ArrayList<Moves> movesline = new ArrayList<Moves>();		//-----------------
-			ArrayList<Integer> movesindex = new ArrayList<Integer>();	// 
+			ArrayList<Moves> movesline = new ArrayList<>();		//-----------------
+			ArrayList<Integer> movesindex = new ArrayList<>();	//
 			if (moves != null) {										// Remember some information for 
 				copyMovesInfo(movesline, moves, movesindex, index);		// logging info about moves tree.
 			}															// 
@@ -171,7 +171,7 @@ public abstract class PlayerMachine extends Player {
 	@Override
 	public void makeMove(){
 		// Make random choice if estimates are equal.
-		ArrayList<Integer> list = new ArrayList<Integer>();
+		ArrayList<Integer> list = new ArrayList<>();
 		for (int i = 0; i < getGameState().getNext().size(); i++) {
 			if (getGameState().getNext().get(i).getEstimate() == getGameState().getEstimate()) {
 				list.add(i);
