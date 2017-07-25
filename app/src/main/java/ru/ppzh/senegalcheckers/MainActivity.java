@@ -14,8 +14,7 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	private TextView mCodeVersionView;
-	
-	//private Button mContinueButton;
+
 	private Button mOnePlayerButton;
 	private Button mTwoPlayersButton;
 	private Button mRulesButton;

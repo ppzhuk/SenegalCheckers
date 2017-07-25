@@ -358,33 +358,17 @@ public class PlayFieldView extends View {
 	
 	// Redraw players' points.
 	private void updatePointsLabels(){
-		if (!gameLogic.isInverted()) {
-			player_one_points.setText(""+gameLogic.getPlayer(GameLogic.WHITE).getPoints());
-			player_two_points.setText(""+gameLogic.getPlayer(GameLogic.BLACK).getPoints());
-			player_one_bonus_points.setText(""+gameLogic.getPlayer(GameLogic.WHITE).getBonus_points());
-			player_two_bonus_points.setText(""+gameLogic.getPlayer(GameLogic.BLACK).getBonus_points());	
-		} else {
-			player_one_points.setText(""+gameLogic.getPlayer(GameLogic.BLACK).getPoints());
-			player_two_points.setText(""+gameLogic.getPlayer(GameLogic.WHITE).getPoints());
-			player_one_bonus_points.setText(""+gameLogic.getPlayer(GameLogic.BLACK).getBonus_points());
-			player_two_bonus_points.setText(""+gameLogic.getPlayer(GameLogic.WHITE).getBonus_points());				
-		}
-		
+		player_one_points.setText(""+gameLogic.getPlayer(GameLogic.WHITE).getPoints());
+		player_two_points.setText(""+gameLogic.getPlayer(GameLogic.BLACK).getPoints());
+		player_one_bonus_points.setText(""+gameLogic.getPlayer(GameLogic.WHITE).getBonus_points());
+		player_two_bonus_points.setText(""+gameLogic.getPlayer(GameLogic.BLACK).getBonus_points());
 	}
 	
 	private void updateCurrMoveLabel(){
-		if (!gameLogic.isInverted()){
-			if (currPlayer.getColor() == GameLogic.WHITE) {
-				curr_move_View.setText(R.string.player1);	
-			} else {
-				curr_move_View.setText(R.string.player2);
-			}	
+		if (currPlayer.getColor() == GameLogic.WHITE) {
+			curr_move_View.setText(R.string.white_color);
 		} else {
-			if (currPlayer.getColor() == GameLogic.WHITE) {
-				curr_move_View.setText(R.string.player2);	
-			} else {
-				curr_move_View.setText(R.string.player1);
-			}
+			curr_move_View.setText(R.string.black_color);
 		}
 	}
 	
@@ -457,9 +441,9 @@ public class PlayFieldView extends View {
 		} else {    // Show final dialog.
 			int final_speech;
 			switch (winner){
-                case GameLogic.WHITE: final_speech = R.string.Player1won;
+                case GameLogic.WHITE: final_speech = R.string.whitesWon;
                                       break;
-                case GameLogic.BLACK: final_speech = R.string.Player2won;
+                case GameLogic.BLACK: final_speech = R.string.blacksWon;
                                       break;
 			default: final_speech = R.string.Draw;
 			}	

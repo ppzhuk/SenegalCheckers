@@ -18,8 +18,6 @@ public class PlayActivity extends Activity {
 	private PlayFieldView playField;
 	private GameLogic gameLogic;
 	
-	private TextView player_one_color_text_view;
-	private TextView player_two_color_text_view;
 	private TextView player_one_who_text_view;
 	private TextView player_two_who_text_view;
 	private TextView whose_turn_view;
@@ -33,8 +31,6 @@ public class PlayActivity extends Activity {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_play);
 		
-		player_one_color_text_view = (TextView)this.findViewById(R.id.player1_color_textView);
-		player_two_color_text_view = (TextView)this.findViewById(R.id.playerr2_color_textView);
 		player_one_who_text_view = (TextView)this.findViewById(R.id.player1_who_textView);
 		player_two_who_text_view = (TextView)this.findViewById(R.id.player2_who_textView);
 		whose_turn_view = (TextView)this.findViewById(R.id.whose_turn);
@@ -74,23 +70,18 @@ public class PlayActivity extends Activity {
 	}
 	
 	private void defineViews(int mode){
-		player_one_color_text_view.setText(R.string.white_color);
-		player_two_color_text_view.setText(R.string.black_color);
-		player_one_who_text_view.setText(R.string.man);
-		player_two_who_text_view.setText(R.string.man);
-		whose_turn_view.setText(R.string.player1);
+		player_one_who_text_view.setText("");
+		player_two_who_text_view.setText("");
+		whose_turn_view.setText(R.string.white_color);
 		
 		switch(mode){
-		case 1:
+		case GameLogic.MODE_HUMAN_WHITE:
 			player_two_who_text_view.setText(R.string.machine);
 			break;
-		case 2:
-			player_one_color_text_view.setText(R.string.black_color);
-			player_two_color_text_view.setText(R.string.white_color);
-			player_two_who_text_view.setText(R.string.machine);	
-			whose_turn_view.setText(R.string.player2);
+		case GameLogic.MODE_HUMAN_BLACK:
+			player_one_who_text_view.setText(R.string.machine);
 			break;
-		case 3:
+		case GameLogic.MODE_TWO_MACHINES:
 			player_one_who_text_view.setText(R.string.machine);
 			player_two_who_text_view.setText(R.string.machine);
 			break;

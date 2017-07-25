@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:text="@string/player1"
+            android:text="@string/white_color"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
@@ -43,143 +43,128 @@
         
     </LinearLayout>
 
-    <RelativeLayout
+    <GridLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="25" >
+        android:layout_weight="25"
+        android:columnCount="3"
+        android:rowCount="3"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/player1_textView"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
-            android:text="@string/player1"
+            android:orientation="horizontal"></LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/player1_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:text="@string/white_color"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <TextView
+                android:id="@+id/player1_who_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="@string/machine"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/player2_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:text="@string/black_color"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <TextView
+                android:id="@+id/player2_who_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:text="@string/machine"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:text="@string/checkers_taken"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
             android:id="@+id/player1_score_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/player1_color_textView"
+            android:layout_gravity="start"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:text="0"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/player2_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:text="@string/player2"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <TextView
             android:id="@+id/player2_score_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/playerr2_color_textView"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_gravity="end"
+            android:layout_marginRight="15dp"
+            android:layout_marginEnd="15dp"
             android:text="0"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/left_plus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/player1_score_textView"
-            android:layout_alignBottom="@+id/player1_score_textView"
-            android:layout_toEndOf="@+id/player1_score_textView"
-            android:layout_toRightOf="@+id/player1_score_textView"
-            android:text="+"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:text="@string/bonus"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
             android:id="@+id/player1_bonus_score_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/player1_score_textView"
-            android:layout_alignBottom="@+id/player1_score_textView"
-            android:layout_toEndOf="@+id/left_plus"
-            android:layout_toRightOf="@+id/left_plus"
+            android:layout_gravity="start"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:text="0"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:id="@+id/right_plus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/player2_score_textView"
-            android:layout_alignBottom="@+id/player2_score_textView"
-            android:layout_toLeftOf="@+id/player2_score_textView"
-            android:layout_toStartOf="@+id/player2_score_textView"
-            android:text="+"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
             android:id="@+id/player2_bonus_score_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/right_plus"
-            android:layout_alignBottom="@+id/right_plus"
-            android:layout_toLeftOf="@+id/right_plus"
-            android:layout_toStartOf="@+id/right_plus"
+            android:layout_gravity="end"
+            android:layout_marginRight="15dp"
+            android:layout_marginEnd="15dp"
             android:text="0"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
-        <TextView
-            android:id="@+id/player1_who_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/player1_textView"
-            android:layout_alignStart="@+id/player1_textView"
-            android:layout_below="@+id/player1_textView"
-            android:text="@string/man"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <TextView
-            android:id="@+id/player2_who_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignRight="@+id/player2_textView"
-            android:layout_alignEnd="@+id/player2_textView"
-            android:layout_below="@+id/player2_textView"
-            android:text="@string/machine"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/player1_color_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/player1_who_textView"
-            android:layout_alignStart="@+id/player1_who_textView"
-            android:layout_below="@+id/player1_who_textView"
-            android:text="@string/white_color"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:id="@+id/playerr2_color_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/player1_score_textView"
-            android:layout_alignRight="@+id/player2_who_textView"
-            android:layout_alignEnd="@+id/player2_who_textView"
-            android:text="@string/black_color"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    </RelativeLayout>
+    </GridLayout>
 
 </LinearLayout>
