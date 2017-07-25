@@ -7,7 +7,7 @@ It is a checkers game for Android. Senegal checkers were used as a reference, bu
 * Android 4.4
 
 #### Demo
-You can watch the demo [here](http://www.youtube.com/watch?v=t63-YJ5vgh8).
+You can watch the demo [here](https://youtu.be/WgFQpty3xfw).
 
 #### Download
 [Google Play Market](https://play.google.com/store/apps/details?id=ru.ppzh.senegalcheckers)
