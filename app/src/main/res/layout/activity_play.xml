@@ -2,13 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/wooden"
     android:orientation="vertical"
-    tools:context=".PlayActivity" >
+    tools:context=".PlayActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="15" >
+        android:layout_weight="15">
 
         <TextView
             android:id="@+id/whose_turn"
@@ -33,14 +34,14 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="60"
-        android:padding="5dp" >
+        android:padding="5dp">
 
         <ru.ppzh.senegalcheckers.PlayFieldView
             android:id="@+id/play_field"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/play_field_color" />
-        
+
     </LinearLayout>
 
     <GridLayout
@@ -48,8 +49,8 @@
         android:layout_height="0dp"
         android:layout_weight="25"
         android:columnCount="3"
-        android:rowCount="3"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:rowCount="3">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -75,10 +76,10 @@
                 android:id="@+id/player1_who_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginRight="10dp"
                 android:layout_marginEnd="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginStart="5dp"
                 android:text="@string/machine"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </LinearLayout>
@@ -131,8 +132,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginRight="15dp"
             android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
             android:text="0"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -159,8 +160,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginRight="15dp"
             android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
             android:text="0"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 

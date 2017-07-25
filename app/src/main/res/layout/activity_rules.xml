@@ -1,7 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:background="@drawable/wooden"
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
@@ -14,20 +15,20 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/rules_text_part1"
-                android:textColor="#000000"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-            
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#000000" />
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -41,8 +42,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/rules_text"
-                android:textColor="#000000"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#000000" />
 
         </LinearLayout>
     </ScrollView>

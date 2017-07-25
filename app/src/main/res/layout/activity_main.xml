@@ -1,7 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:background="@drawable/wooden"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/title_view"
@@ -45,10 +46,10 @@
         android:layout_marginBottom="15dp"
         android:text="@string/two_machines"
         android:visibility="invisible" />
-    
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/code_version"
